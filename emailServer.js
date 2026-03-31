@@ -5,9 +5,12 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
-const DEFAULT_PORT = 3005;
+const PORT = process.env.PORT || 3005;
 
-// middlewares
+// Serve static files
+app.use(express.static("public"));
+
+// Middlewares
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -46,7 +49,7 @@ app.post("/send", async (req, res) => {
   }
 });
 
-// function to start server
+// Start server
 function startServer(port) {
   const server = app.listen(port, () => {
     console.log(`✅ Email Server running on http://localhost:${port}`);
@@ -62,4 +65,4 @@ function startServer(port) {
   });
 }
 
-startServer(DEFAULT_PORT);
+startServer(PORT);

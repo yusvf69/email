@@ -1,4 +1,11 @@
 {
+  "name": "email-server",
+  "version": "1.0.0",
+  "description": "Server to handle contact form emails",
+  "main": "emailServer.js",
+  "scripts": {
+    "start": "node emailServer.js"
+  },
   "dependencies": {
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
