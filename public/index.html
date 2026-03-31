@@ -101,221 +101,157 @@
     </div>
 
     <script>
-        // API Configuration
-      const API_BASE_URL = '/api';
-        
-        // Contact form handling
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.value;
-            
-            // Show loading state
-            submitBtn.value = 'Sending...';
-            submitBtn.disabled = true;
-            
-            // Hide previous messages
-            document.getElementById('successMessage').style.display = 'none';
-            document.getElementById('errorMessage').style.display = 'none';
-            
-            try {
-                // Get form data
-                const formData = {
-                    name: document.getElementById('name').value.trim(),
-                    email: document.getElementById('email').value.trim(),
-                    subject: document.getElementById('subject').value.trim() || 'Contact Form Submission',
-                    message: document.getElementById('message').value.trim(),
-                    phone: document.getElementById('phone').value.trim() || null
-                };
-                
-                // Validate required fields
-                if (!formData.name || !formData.email || !formData.message) {
-                    throw new Error('Please fill in all required fields.');
-                }
-                
-                // Validate email format
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(formData.email)) {
-                    throw new Error('Please enter a valid email address.');
-                }
-                
-                // Send contact form
-               fetch(`${API_BASE_URL}/send`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),  });
-                
-                const result = await response.json();
-                
-                if (response.ok && result.success) {
-                                    // Show success message
-                document.getElementById('successMessage').style.display = 'block';
-                
-                // Reset form
-                document.getElementById('contactForm').reset();
-                
-                // Scroll to success message
-                document.getElementById('successMessage').scrollIntoView({ 
-                    behavior: 'smooth' 
-                });
-                
-                // Auto-hide after 5 seconds
-                autoHideMessages();
-                } else {
-                    throw new Error(result.error || 'Failed to send message. Please try again.');
-                }
-                
-            } catch (error) {
-                console.error('Contact form error:', error);
-                
-                // Show error message
-                document.getElementById('errorText').textContent = error.message;
-                document.getElementById('errorMessage').style.display = 'block';
-                
-                // Scroll to error message
-                document.getElementById('errorMessage').scrollIntoView({ 
-                    behavior: 'smooth' 
-                });
-                
-                // Auto-hide after 5 seconds
-                autoHideMessages();
-            } finally {
-                // Reset button state
-                submitBtn.value = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-        
-        // Auto-hide messages after 5 seconds
-        function autoHideMessages() {
-            setTimeout(() => {
-                const successMsg = document.getElementById('successMessage');
-                const errorMsg = document.getElementById('errorMessage');
-                
-                if (successMsg.style.display !== 'none') {
-                    successMsg.style.display = 'none';
-                }
-                if (errorMsg.style.display !== 'none') {
-                    errorMsg.style.display = 'none';
-                }
-            }, 5000);
-        }
-        
-        // Add smooth scrolling for better UX
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-        
-        // Form validation on input
-        document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(input => {
-            input.addEventListener('blur', function() {
-                validateField(this);
-            });
-            
-            input.addEventListener('input', function() {
-                clearFieldError(this);
-            });
-        });
-      function validateField(field) {
-  const value = field.value.trim();
-  let isValid = true;
-  let errorMessage = '';
-
-  switch (field.id) {
-    case 'name':
-      if (!value) {
-        isValid = false;
-        errorMessage = 'Name is required';
-      } else if (value.length < 2) {
-        isValid = false;
-        errorMessage = 'Name must be at least 2 characters';
-      }
-      break;
-
-    case 'email':
-      if (!value) {
-        isValid = false;
-        errorMessage = 'Email is required';
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        isValid = false;
-        errorMessage = 'Please enter a valid email address';
-      }
-      break;
-
-    case 'message':
-      if (!value) {
-        isValid = false;
-        errorMessage = 'Message is required';
-      } else if (value.length < 10) {       // كان < 1 بالغلط
-        isValid = false;
-        errorMessage = 'Message must be at least 10 characters';
-      }
-      break;
-
-    case 'phone':
-      // phone اختياري – لو فيه قيمة لازم يكون بالشكل +20 ثم 10 أرقام
-      const digits = value.replace(/\s+/g, '');
-      if (digits && !/^\+20\d{10}$/.test(digits)) {
-        isValid = false;
-        errorMessage = 'Use format +20XXXXXXXXXX';
-      }
-      break;
-  }
-
-  if (!isValid) {
-    showFieldError(field, errorMessage);
-  } else {
-    clearFieldError(field);
-  }
-  return isValid;
-}
-        
-       function showFieldError(field, message) {
-  clearFieldError(field);
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'field-error';
-  errorDiv.textContent = message;
-  field.parentNode.appendChild(errorDiv);
-  field.classList.add('error');
-}
-
-function clearFieldError(field) {
-  const existingError = field.parentNode.querySelector('.field-error');
-  if (existingError) existingError.remove();
-  field.classList.remove('error');
-}
-
-  // 👇 جزء خاص برقم الموبايل
+  // Contact form handling
+  const contactForm = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
   const phoneInput = document.getElementById('phone');
+
+  contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const originalText = submitBtn.value;
+    submitBtn.value = 'Sending...';
+    submitBtn.disabled = true;
+
+    // Hide previous messages
+    document.getElementById('successMessage').style.display = 'none';
+    document.getElementById('errorMessage').style.display = 'none';
+
+    try {
+      // Get form data
+      const formData = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        subject: document.getElementById('subject').value.trim() || 'Contact Form Submission',
+        message: document.getElementById('message').value.trim(),
+        phone: phoneInput.value.trim() || null
+      };
+
+      // Validate required fields
+      if (!formData.name || !formData.email || !formData.message) {
+        throw new Error('Please fill in all required fields.');
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Please enter a valid email address.');
+      }
+
+      // Send contact form to Vercel serverless function
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        document.getElementById('successMessage').style.display = 'block';
+        contactForm.reset();
+        document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+        autoHideMessages();
+      } else {
+        throw new Error(result.message || 'Failed to send message. Please try again.');
+      }
+
+    } catch (error) {
+      console.error('Contact form error:', error);
+      document.getElementById('errorText').textContent = error.message;
+      document.getElementById('errorMessage').style.display = 'block';
+      document.getElementById('errorMessage').scrollIntoView({ behavior: 'smooth' });
+      autoHideMessages();
+    } finally {
+      submitBtn.value = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+
+  // Auto-hide messages
+  function autoHideMessages() {
+    setTimeout(() => {
+      const successMsg = document.getElementById('successMessage');
+      const errorMsg = document.getElementById('errorMessage');
+      if (successMsg.style.display !== 'none') successMsg.style.display = 'none';
+      if (errorMsg.style.display !== 'none') errorMsg.style.display = 'none';
+    }, 5000);
+  }
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Form validation
+  document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(input => {
+    input.addEventListener('blur', () => validateField(input));
+    input.addEventListener('input', () => clearFieldError(input));
+  });
+
+  function validateField(field) {
+    const value = field.value.trim();
+    let isValid = true;
+    let errorMessage = '';
+
+    switch (field.id) {
+      case 'name':
+        if (!value) { isValid = false; errorMessage = 'Name is required'; }
+        else if (value.length < 2) { isValid = false; errorMessage = 'Name must be at least 2 characters'; }
+        break;
+      case 'email':
+        if (!value) { isValid = false; errorMessage = 'Email is required'; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) { isValid = false; errorMessage = 'Please enter a valid email address'; }
+        break;
+      case 'message':
+        if (!value) { isValid = false; errorMessage = 'Message is required'; }
+        else if (value.length < 10) { isValid = false; errorMessage = 'Message must be at least 10 characters'; }
+        break;
+      case 'phone':
+        const digits = value.replace(/\s+/g, '');
+        if (digits && !/^\+20\d{10}$/.test(digits)) { isValid = false; errorMessage = 'Use format +20XXXXXXXXXX'; }
+        break;
+    }
+
+    if (!isValid) showFieldError(field, errorMessage);
+    else clearFieldError(field);
+    return isValid;
+  }
+
+  function showFieldError(field, message) {
+    clearFieldError(field);
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'field-error';
+    errorDiv.textContent = message;
+    field.parentNode.appendChild(errorDiv);
+    field.classList.add('error');
+  }
+
+  function clearFieldError(field) {
+    const existingError = field.parentNode.querySelector('.field-error');
+    if (existingError) existingError.remove();
+    field.classList.remove('error');
+  }
+
+  // Ensure phone starts with +20
   function ensurePlus20() {
     if (!phoneInput.value.startsWith('+20')) {
       phoneInput.value = '+20' + phoneInput.value.replace(/^\+?20?/, '');
     }
   }
   phoneInput.addEventListener('focus', ensurePlus20);
-  phoneInput.addEventListener('input')
-        
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Contact page loaded successfully');
-            
-            // Add some interactive effects
-            document.querySelectorAll('.details').forEach(detail => {
-                detail.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-5px)';
-                });
-                
-                detail.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-        });
-    </script>
+  phoneInput.addEventListener('input', ensurePlus20);
+
+  // Page init
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('Contact page loaded successfully');
+    document.querySelectorAll('.details').forEach(detail => {
+      detail.addEventListener('mouseenter', () => detail.style.transform = 'translateY(-5px)');
+      detail.addEventListener('mouseleave', () => detail.style.transform = 'translateY(0)');
+    });
+  });
+</script>
 </body>
 </html>
