@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="all.css">
+    <title>Contact Us - Al Marsam Handicrafts</title>
+    <script src="contact-form.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="left-side">
+                <div class="address details">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="topic">Address</div>
+                  <div class="text-one">
+  <a href="https://maps.app.goo.gl/pgvSidRuqzBG5UbG6"  id="address-textal" class="text-two">
+    22nd Street, off El-Mahkama Street<br>
+    Al-Zohour Tower, 2nd Floor<br>
+    In front of Tabarak Center for Physical Therapy
+  </a>
+</div>
+
+<!-- حطّ الستايل ده بعد كل ملفات الـ CSS التانية -->
+<style>
+/* استهداف قوي + !important لو في ستايل سابق بيغلب */
+#address-textal,
+#address-textal:link,
+#address-textal:visited {
+  font-size: 10px !important;   /* صغّر/كبّر الرقم */
+  line-height: 1.6 !important;
+  text-decoration: none !important;  /* يشيل الخط */
+  display: inline-block;
+  /* color: #e9d8c2 !important;  اختياري: لون أهدى */
+}
+</style>
+                    <div class="text-two">Cairo, Egypt</div>
+                </div>
+                <div class="phone details">
+                    <i class="fas fa-phone-alt"></i>
+                    <div class="topic">Phone</div>
+                    <div class="text-one">+201270982997</div>
+                    <div class="text-two">+201234567890</div>
+                </div>
+                <div class="email details">
+                    <i class="fas fa-envelope"></i>
+                    <div class="topic">Email</div>
+                    <div class="text-one">almarsamart636@gmail.com</div>
+                    <div class="text-two">info@al-marsam.com</div>
+                </div>
+                <div class="social details">
+                    <i class="fas fa-share-alt"></i>
+                    <div class="topic">Social Media</div>
+                    <div class="text-one">Follow us on</div>
+                    <div class="text-two"> <a href="https://www.facebook.com/profile.php?id=61560572036645" class="text-two" id="linkmr" style="text-decoration: none;">facebook</a>, <a href="https://www.instagram.com/al.marsam/" class="text-two" id="linkmr" style="text-decoration: none;" >Instagram</a>, <a href="" class="text-two" id="linkmr" style="text-decoration: none;" >Twitter</a></div>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="topic-text">Send us a message</div>
+                <p>If you have any questions about our products, want to place an order, or have any other inquiries, please send us a message. We're here to help you discover the beauty of handmade crafts.</p>
+                
+                <form id="contactForm" method="POST">
+                    <div class="input-box">
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" id="subject" name="subject" placeholder="Subject (optional)">
+                    </div>
+                    <div class="input-box">
+                        <input type="tel" id="phone" name="phone" placeholder="Phone number (optional)">
+                    </div>
+                    <div class="input-box message-box">
+                        <textarea id="message" name="message" placeholder="Enter your message" required></textarea>
+                    </div>
+                    <div class="button">
+                        <input type="submit" value="Send Message" id="submitBtn">
+                    </div>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="success-message" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Message Sent Successfully!</h3>
+                    <p>Thank you for contacting us. We'll get back to you soon.</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Error Sending Message</h3>
+                    <p id="errorText">Please try again later.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3005';
+        
+        // Contact form handling
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.value;
+            
+            // Show loading state
+            submitBtn.value = 'Sending...';
+            submitBtn.disabled = true;
+            
+            // Hide previous messages
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            try {
+                // Get form data
+                const formData = {
+                    name: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    subject: document.getElementById('subject').value.trim() || 'Contact Form Submission',
+                    message: document.getElementById('message').value.trim(),
+                    phone: document.getElementById('phone').value.trim() || null
+                };
+                
+                // Validate required fields
+                if (!formData.name || !formData.email || !formData.message) {
+                    throw new Error('Please fill in all required fields.');
+                }
+                
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    throw new Error('Please enter a valid email address.');
+                }
+                
+                // Send contact form
+               const response = await fetch(`${API_BASE_URL}/send`, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify(formData),
+            });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                                    // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Reset form
+                document.getElementById('contactForm').reset();
+                
+                // Scroll to success message
+                document.getElementById('successMessage').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+                // Auto-hide after 5 seconds
+                autoHideMessages();
+                } else {
+                    throw new Error(result.error || 'Failed to send message. Please try again.');
+                }
+                
+            } catch (error) {
+                console.error('Contact form error:', error);
+                
+                // Show error message
+                document.getElementById('errorText').textContent = error.message;
+                document.getElementById('errorMessage').style.display = 'block';
+                
+                // Scroll to error message
+                document.getElementById('errorMessage').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+                // Auto-hide after 5 seconds
+                autoHideMessages();
+            } finally {
+                // Reset button state
+                submitBtn.value = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Auto-hide messages after 5 seconds
+        function autoHideMessages() {
+            setTimeout(() => {
+                const successMsg = document.getElementById('successMessage');
+                const errorMsg = document.getElementById('errorMessage');
+                
+                if (successMsg.style.display !== 'none') {
+                    successMsg.style.display = 'none';
+                }
+                if (errorMsg.style.display !== 'none') {
+                    errorMsg.style.display = 'none';
+                }
+            }, 5000);
+        }
+        
+        // Add smooth scrolling for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Form validation on input
+        document.querySelectorAll('#contactForm input, #contactForm textarea').forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                clearFieldError(this);
+            });
+        });
+      function validateField(field) {
+  const value = field.value.trim();
+  let isValid = true;
+  let errorMessage = '';
+
+  switch (field.id) {
+    case 'name':
+      if (!value) {
+        isValid = false;
+        errorMessage = 'Name is required';
+      } else if (value.length < 2) {
+        isValid = false;
+        errorMessage = 'Name must be at least 2 characters';
+      }
+      break;
+
+    case 'email':
+      if (!value) {
+        isValid = false;
+        errorMessage = 'Email is required';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid email address';
+      }
+      break;
+
+    case 'message':
+      if (!value) {
+        isValid = false;
+        errorMessage = 'Message is required';
+      } else if (value.length < 10) {       // كان < 1 بالغلط
+        isValid = false;
+        errorMessage = 'Message must be at least 10 characters';
+      }
+      break;
+
+    case 'phone':
+      // phone اختياري – لو فيه قيمة لازم يكون بالشكل +20 ثم 10 أرقام
+      const digits = value.replace(/\s+/g, '');
+      if (digits && !/^\+20\d{10}$/.test(digits)) {
+        isValid = false;
+        errorMessage = 'Use format +20XXXXXXXXXX';
+      }
+      break;
+  }
+
+  if (!isValid) {
+    showFieldError(field, errorMessage);
+  } else {
+    clearFieldError(field);
+  }
+  return isValid;
+}
+        
+       function showFieldError(field, message) {
+  clearFieldError(field);
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'field-error';
+  errorDiv.textContent = message;
+  field.parentNode.appendChild(errorDiv);
+  field.classList.add('error');
+}
+
+function clearFieldError(field) {
+  const existingError = field.parentNode.querySelector('.field-error');
+  if (existingError) existingError.remove();
+  field.classList.remove('error');
+}
+
+  // 👇 جزء خاص برقم الموبايل
+  const phoneInput = document.getElementById('phone');
+  function ensurePlus20() {
+    if (!phoneInput.value.startsWith('+20')) {
+      phoneInput.value = '+20' + phoneInput.value.replace(/^\+?20?/, '');
+    }
+  }
+  phoneInput.addEventListener('focus', ensurePlus20);
+  phoneInput.addEventListener('input')
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Contact page loaded successfully');
+            
+            // Add some interactive effects
+            document.querySelectorAll('.details').forEach(detail => {
+                detail.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                detail.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

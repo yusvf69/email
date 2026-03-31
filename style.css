@@ -1,0 +1,451 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: s;
+}
+body{
+    min-height: 100vh;
+    width: 100%;
+    background:  hsla(0, 0%, 20%, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.container{
+    width: 80%;
+    background:hsla(31, 17%, 44%, 1);
+    border-radius: 6px;
+    padding: 30px 60px 40px 40px;
+    box-shadow: 0 5px 10px hsla(31, 17%, 36%, 1);
+}
+.container .content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.container .content .left-side{
+    width: 25%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    position: relative;
+}
+.content .left-side::before{
+    content: '';
+    position: absolute;
+    height: 70%;
+    width: 2px;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: hsla(30, 30%, 58%, 1);
+}
+.content .left-side .details{
+    margin: 14px;
+    text-align: center;
+}
+.content .left-side .details i{
+    font-size: 30px;
+    color: hsla(30, 30%, 58%, 1);
+    margin-bottom: 10px;
+}
+.content .left-side .details .topic{
+    font-size: 18px ;
+    font-weight: 500;
+}
+.content .left-side .details .text-one,
+.content .left-side .details .text-two{
+    font-size: 14px;
+    color: rgb(223, 193, 161);
+}
+.container .content .right-side{
+    width: 75%;
+    margin-left: 75px;
+}
+.content .right-side .topic-text{
+    font-size: 23px;
+    font-weight: 600;
+    color: hsla(30, 30%, 58%, 1);
+}
+.right-side .input-box{
+    height:50px;
+    width: 100%;
+    margin: 12px 0;
+}
+.right-side .input-box input,
+.right-side .input-box textarea
+    {
+    height:100%;
+    width: 100%;
+    border: none; 
+    font-size: 16px;
+    border-radius: 6px;
+    background: hsla(31, 17%, 36%, 1);
+    padding: 0 15px;
+    resize: none;
+}
+.right-side .message-box{
+    min-height: 110px;
+}
+.right-side .button{
+    margin-top: 12px;
+    display: inline-block;
+}
+.right-side .button input[type="button"]{
+    color: rgb(128, 112, 96);
+    font-size: 18px;
+    outline: none;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    background: hsla(30, 30%, 58%, 1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.button input[type="button"]:hover{
+    background: rgb(255, 243, 230);
+    color: rgb(88, 76, 65);
+}
+@media(max-width:950px){
+    .container{
+        width: 90%;
+        padding: 30px 35px 40px 35px;
+    }
+}
+@media(max-width:950px){
+    .container{
+        margin: 40px 0;
+        height: 100%;
+    }
+    .container .content{
+        flex-direction: column-reverse;
+    }
+    .container .content .left-side{
+        width: 100%;
+        flex-direction: row;
+        margin-top: 40px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .container .content .left-side::before{
+        display: none;
+    }
+    .container .content .right-side{
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+/* Success and Error Messages */
+.success-message,
+.error-message {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.5s ease-out;
+}
+
+.success-message {
+    border-left: 4px solid #2ed573;
+}
+
+.error-message {
+    border-left: 4px solid #ff4757;
+}
+
+.success-message i,
+.error-message i {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.success-message i {
+    color: #2ed573;
+}
+
+.error-message i {
+    color: #ff4757;
+}
+
+.success-message h3,
+.error-message h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.success-message h3 {
+    color: #2ed573;
+}
+
+.error-message h3 {
+    color: #ff4757;
+}
+
+.success-message p,
+.error-message p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Form Improvements */
+.input-box input:focus,
+.input-box textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    outline: none;
+}
+
+.input-box input.error,
+.input-box textarea.error {
+    border-color: #ff4757;
+    box-shadow: 0 0 0 2px rgba(255, 71, 87, 0.2);
+}
+
+/* Button Improvements */
+.button input[type="submit"] {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.button input[type="submit"]:hover {
+    background: linear-gradient(135deg, #45a049, #4CAF50);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.button input[type="submit"]:active {
+    transform: translateY(0);
+}
+
+.button input[type="submit"]:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Field Error Styling */
+.field-error {
+    color: #ff4757;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* Social Media Section */
+.social.details {
+    margin-top: 20px;
+}
+
+.social.details i {
+    color: #ff6b6b;
+}
+
+/* Responsive Improvements */
+@media (max-width: 950px) {
+    .success-message,
+    .error-message {
+        margin: 20px 0;
+        padding: 15px;
+    }
+    
+    .success-message i,
+    .error-message i {
+        font-size: 36px;
+    }
+    
+    .success-message h3,
+    .error-message h3 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .success-message,
+    .error-message {
+        margin: 15px 0;
+        padding: 12px;
+    }
+    
+    .success-message i,
+    .error-message i {
+        font-size: 32px;
+    }
+    
+    .success-message h3,
+    .error-message h3 {
+        font-size: 16px;
+    }
+    
+    .success-message p,
+    .error-message p {
+        font-size: 13px;
+    }
+}
+
+/* Animation for messages */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading state for button */
+.button input[type="submit"].loading {
+    position: relative;
+    color: transparent;
+}
+
+.button input[type="submit"].loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced form styling */
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box input,
+.input-box textarea {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e1e1e1;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.input-box input:hover,
+.input-box textarea:hover {
+    border-color: #4CAF50;
+}
+
+.input-box input:focus,
+.input-box textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+/* Placeholder styling */
+.input-box input::placeholder,
+.input-box textarea::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+/* Message box specific styling */
+.message-box textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* Enhanced details styling */
+.details {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 10px; /* أضف هذا */
+}
+
+.details:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 10px; /* هذا مهم */
+}
+
+.details i {
+    transition: all 0.3s ease;
+}
+
+.details:hover i {
+    transform: scale(1.1);
+}
+
+/* Topic text enhancement */
+.topic-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Description text enhancement */
+.right-side p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 16px;
+}
+/* --- Fix error message layout --- */
+.right-side .input-box{
+  height: auto !important;          /* بلاش ارتفاع ثابت */
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;           /* خلّي الخطأ تحت الحقل */
+  gap: 6px;                         /* مسافة صغيرة بين الحقل والخطأ */
+}
+
+.right-side .input-box input{
+  height: 48px !important;          /* بدل 100% */
+}
+
+.right-side .input-box textarea{
+  min-height: 120px !important;     /* بدل 100% */
+}
+
+.right-side .input-box .field-error{
+  color: #ff4757;
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+  margin-top: 0;                    /* لأن عندنا gap فوق */
+}
+
+#linkmr:hover { 
+    color: rgb(88, 76, 65);
+
+}
+#address-textal:hover{
+    color: rgb(88, 76, 65);
+}
